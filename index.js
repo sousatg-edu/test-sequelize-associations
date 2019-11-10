@@ -1,59 +1,19 @@
-const {Sequelize, Model, DataTypes} = require('sequelize');
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const app = express();
 
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: __dirname + '/database.db'
-});
+const products = require('./routes/products');
+const productOrders = require('./routes/productOrders');
+const orders = require('./routes/orders');
+const customers = require('./routes/customers');
 
-const Model = Sequelize.Model;
+app.use(cors());
+app.use(bodyParser.json());
 
-class Product extends Model {}
+app.use('/customers', customers);
+app.use('/products', products);
+app.use('/productorders', productOrders);
+app.use('/orders', orders);
 
-Product.init({
-    id: {
-        type: DataTypes.UUID,
-    },
-    title: {
-        type: DataTypes.STRING,
-    },
-    description: {
-        type: DataTypes.TEXT,
-    },
-    price: {
-        type: DataTypes.DECIMAL
-    },
-}, {
-    sequelize,
-    modelName: 'product',
-});
-
-class Order extends Model {}
-
-Order.init({
-    id: {
-        type: DataTypes.UUID,
-    },
-    address: {
-        type: DataTypes.STRING,
-    },
-}, {
-    sequelize,
-    modelName: 'order',
-});
-
-class ProductOrder extends Model {}
-
-ProductOrder.init({
-    id: {
-        type: DataTypes.UUID,
-    },
-    productId: {
-        type: DataTypes.UUID,
-    },
-    orderId: {
-        type: DataTypes.UUID,
-    },
-    quantity: {
-        type: DataTypes.DECIMAL,
-    },
-});
+app.listen(8000, _ => console.log('Running...'));

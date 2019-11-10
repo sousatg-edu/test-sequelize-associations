@@ -1,13 +1,28 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const Product = sequelize.define('Product', {
-    id: DataTypes.UUID,
-    title: DataTypes.STRING,
-    description: DataTypes.TEXT,
-    price: DataTypes.DECIMAL
-  }, {});
-  Product.associate = function(models) {
-    
-  };
-  return Product;
-};
+const {Model, DataTypes} = require('sequelize');
+const sequelize = require('../sequelize');
+const uuid = require('uuid');
+
+class Product extends Model {}
+
+Product.init({
+    id: {
+        type: DataTypes.UUID,
+        primaryKey: true,
+        defaultValue: uuid(),
+    },
+    title: {
+        type: DataTypes.STRING,
+    },
+    description: {
+        type: DataTypes.TEXT,
+    },
+    price: {
+        type: DataTypes.DECIMAL
+    },
+}, {
+    sequelize,
+    modelName: 'product',
+    timestamps: false,
+});
+
+module.exports = Product;

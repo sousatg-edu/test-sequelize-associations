@@ -1,11 +1,25 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const Order = sequelize.define('Order', {
-    id: DataTypes.UUID,
-    address: DataTypes.STRING
-  }, {});
-  Order.associate = function(models) {
-    // associations can be defined here
-  };
-  return Order;
-};
+const {Model, DataTypes} = require('sequelize');
+const sequelize = require('../sequelize');
+const uuid = require('uuid');
+
+class Order extends Model {}
+
+Order.init({
+    id: {
+        type: DataTypes.UUID,
+        primaryKey: true,
+        defaultValue: uuid(),
+    },
+    address: {
+        type: DataTypes.STRING,
+    },
+    customerId: {
+        type: DataTypes.STRING,
+    },
+}, {
+    sequelize,
+    modelName: 'order',
+    timestamps: false,
+});
+
+module.exports = Order;

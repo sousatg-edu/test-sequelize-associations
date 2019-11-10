@@ -4,12 +4,8 @@ module.exports = {
     return queryInterface.createTable('ProductOrders', {
       id: {
         allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      id: {
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
+        primaryKey: true
       },
       productId: {
         type: Sequelize.UUID
@@ -20,14 +16,6 @@ module.exports = {
       quantity: {
         type: Sequelize.DECIMAL
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
     });
   },
   down: (queryInterface, Sequelize) => {

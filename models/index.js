@@ -1,37 +1,28 @@
-'use strict';
+const Product = require ('./product');
+const ProductOrder = require('./productorder');
+const Order = require('./order');
+const Customer = require('./customer');
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
-const db = {};
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+Order.belongsTo(Customer);
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-  })
-  .forEach(file => {
-    const model = sequelize['import'](path.join(__dirname, file));
-    db[model.name] = model;
-  });
-
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
+Product.belongsToMany(Order, {
+    through: 'ProductOrders',
+    as: 'orders',
+    foreignKey: 'productId',
+    otherKey: 'orderId'
 });
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+Order.belongsToMany(Product, {
+    through: 'ProductOrders',
+    as: 'products',
+    foreignKey: 'orderId',
+    otherKey: 'productId'
+});
 
-module.exports = db;
+module.exports = {
+    Customer,
+    Order,
+    Product,
+    ProductOrder,
+};
